@@ -180,7 +180,7 @@ textarea{min-height:5.5rem;resize:vertical}
 .card{margin-top:2rem;border:1px solid var(--gold);padding:2.2rem 1.5rem 1.8rem;background:var(--field);position:relative}
 .card::before{content:"";position:absolute;inset:6px;border:1px solid var(--gold);opacity:.4;pointer-events:none}
 .card>*{position:relative}
-.card .who{font-family:var(--script);font-size:2.5rem;line-height:1.15;text-align:center;margin:0;color:var(--accent)}
+.card .who{font-family:var(--script);font-size:2.5rem;line-height:1.15;text-align:center;margin:0;color:var(--accent);text-transform:none}
 .card .seats{text-align:center;margin:.8rem 0 1.6rem;font-style:italic}
 .card .seats b{display:block;font-size:4rem;line-height:1;font-weight:500;font-style:normal;background:var(--foil);-webkit-background-clip:text;background-clip:text;color:transparent}
 .choice{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin:0 0 1.4rem}

@@ -123,11 +123,17 @@ q.addEventListener("input",()=>{
   });
 });
 
+// Title-case names for display; leave underlying guest records unchanged.
+function displayGuestName(name){
+  return String(name || "").toLocaleLowerCase("en-PH")
+    .replace(/(^|[\s'-])([a-z])/g, (_, separator, letter) => separator + letter.toUpperCase());
+}
+
 function pick(g){
   results.innerHTML=""; q.value=g.name;
   panel.innerHTML=`
     <div class="card">
-      <p class="who">${esc(g.name)}</p>
+      <p class="who">${esc(displayGuestName(g.name))}</p>
       <p class="hint">Enter the invitation code sent with your wedding invitation.</p>
       <div class="field">
         <label for="inviteCode">Invitation Code <span aria-label="required">*</span></label>
@@ -174,7 +180,7 @@ function renderRSVP(group,code){
   }).join("");
   panel.innerHTML=`
     <div class="card">
-      <p class="who">${esc(primary.name)}</p>
+      <p class="who">${esc(displayGuestName(primary.name))}</p>
       <div class="seats"><b>${members.length}</b> reserved ${members.length===1?"seat":"seats"}</div>
       <p class="hint">Please select everyone who will attend. Unchecked guests will be marked as not attending.</p>
       <div class="attendee-list">${rows}</div>

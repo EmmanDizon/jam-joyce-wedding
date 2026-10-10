@@ -123,17 +123,11 @@ q.addEventListener("input",()=>{
   });
 });
 
-// Display guest names in title case without changing the stored/searchable name.
-function displayGuestName(name){
-  return String(name || "").toLocaleLowerCase("en-PH")
-    .replace(/(^|[\s'-])([a-z])/g, (_, separator, letter) => separator + letter.toUpperCase());
-}
-
 function pick(g){
   results.innerHTML=""; q.value=g.name;
   panel.innerHTML=`
     <div class="card">
-      <p class="who">${esc(displayGuestName(g.name))}</p>
+      <p class="who">${esc(g.name)}</p>
       <p class="hint">Enter the invitation code sent with your wedding invitation.</p>
       <div class="field">
         <label for="inviteCode">Invitation Code <span aria-label="required">*</span></label>
@@ -165,16 +159,22 @@ function renderRSVP(group,code){
   const saved=group.previous||{};
   const selected=new Set(saved.attendeeIds||[]);
   const hasPrevious=!!group.previous;
-  const rows=members.map(m=>`
+  const previousNames=saved.companionNames||{};
+  const rows=members.map(m=>{
+    const unnamed=!m.main && !String(m.name||"").trim();
+    const checked=hasPrevious ? selected.has(String(m.guestId)) : !!m.main;
+    return `
     <label class="attendee-option">
       <input type="checkbox" class="attendee-check" value="${esc(m.guestId)}"
-        ${hasPrevious ? (selected.has(String(m.guestId))?"checked":"") : (m.main?"checked":"")}>
-      <span class="attendee-name">${esc(m.name)}
-        <small>${m.main?"Main guest":"Companion"}</small></span>
-    </label>`).join("");
+        ${checked?"checked":""}>
+      <span class="attendee-name">${esc(unnamed?"Your companion":m.name)}
+        <small>${m.main?"Main guest":"Companion"}</small>
+        ${unnamed?`<input class="companion-fullname" data-guest-id="${esc(m.guestId)}" type="text" maxlength="120" autocomplete="name" placeholder="Companion's full name" aria-label="Companion's full name" value="${esc(previousNames[String(m.guestId)]||"")}" ${checked?"required":"disabled"} style="display:block;width:100%;margin-top:10px;padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--field);color:var(--ink);font:inherit;font-size:1rem;box-sizing:border-box;"/>`:""}</span>
+    </label>`;
+  }).join("");
   panel.innerHTML=`
     <div class="card">
-      <p class="who">${esc(displayGuestName(primary.name))}</p>
+      <p class="who">${esc(primary.name)}</p>
       <div class="seats"><b>${members.length}</b> reserved ${members.length===1?"seat":"seats"}</div>
       <p class="hint">Please select everyone who will attend. Unchecked guests will be marked as not attending.</p>
       <div class="attendee-list">${rows}</div>
@@ -194,7 +194,11 @@ function renderRSVP(group,code){
     const n=panel.querySelectorAll(".attendee-check:checked").length;
     $("#attendeeCounter").textContent=`${n} of ${members.length} attending`;
   };
-  panel.querySelectorAll(".attendee-check").forEach(x=>x.addEventListener("change",updateCount));
+  panel.querySelectorAll(".attendee-check").forEach(x=>x.addEventListener("change",()=>{
+    const nameInput=x.closest(".attendee-option").querySelector(".companion-fullname");
+    if(nameInput){nameInput.disabled=!x.checked;nameInput.required=x.checked;}
+    updateCount();
+  }));
   updateCount();
   $("#send").addEventListener("click",()=>sendGroup(group,code));
   panel.querySelector(".card").scrollIntoView({behavior:"smooth",block:"start"});
@@ -210,12 +214,25 @@ async function sendGroup(group,code){
   }
   mobileInput.setCustomValidity("");
   const attendeeIds=[...panel.querySelectorAll(".attendee-check:checked")].map(x=>x.value);
+  const companionNames={};
+  for(const input of panel.querySelectorAll(".companion-fullname")){
+    if(input.disabled) continue;
+    const fullName=input.value.trim().replace(/\s+/g," ");
+    if(fullName.length<2){
+      input.setCustomValidity("Please enter your companion's full name.");
+      input.reportValidity();
+      input.addEventListener("input",()=>input.setCustomValidity(""),{once:true});
+      return;
+    }
+    input.setCustomValidity("");
+    companionNames[input.dataset.guestId]=fullName;
+  }
   const btn=$("#send"),msg=$("#sendMsg");
   btn.disabled=true;btn.textContent="Saving…";msg.textContent="";
   try{
     const message=$("#note").value.trim().slice(0,500);
     const result=await saveReply({
-      groupId:group.groupId,code,attendeeIds,mobileNo,message
+      groupId:group.groupId,code,attendeeIds,companionNames,mobileNo,message
     });
     const rec={
       name:group.members.find(m=>m.main)?.name||group.members[0].name,
@@ -223,7 +240,7 @@ async function sendGroup(group,code){
       role:group.weddingRole || "Guest",
       attending:attendeeIds.length>0,seatsUsed:attendeeIds.length,
       seatsReserved:group.members.length,
-      companions:group.members.filter(m=>!m.main&&attendeeIds.includes(String(m.guestId))).map(m=>m.name)
+      companions:group.members.filter(m=>!m.main&&attendeeIds.includes(String(m.guestId))).map(m=>companionNames[String(m.guestId)]||m.name)
     };
     panel.innerHTML=`<div class="card done">
       <p class="big">RSVP saved</p>
@@ -232,7 +249,7 @@ async function sendGroup(group,code){
       <button class="ghost" id="again" type="button">Change our reply</button>
     </div>`;
     if(attendeeIds.length) openGuide(rec);
-    $("#again").addEventListener("click",()=>renderRSVP({...group,previous:result.previous||{attendeeIds,mobileNo,message}},code));
+    $("#again").addEventListener("click",()=>renderRSVP({...group,previous:result.previous||{attendeeIds,companionNames,mobileNo,message}},code));
   }catch(e){
     btn.disabled=false;btn.textContent="Save our RSVP";
     msg.className="msg err";msg.textContent=e.message||"Unable to save RSVP.";

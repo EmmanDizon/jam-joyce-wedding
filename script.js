@@ -20,8 +20,18 @@ const norm = s => String(s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLo
 const keyOf = g => String(g.groupId || g.guestId || "");
 const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
-/* ---------- Opening moment ---------- */
-$("#openBtn").addEventListener("click",()=>{ $("#gate").classList.add("gone"); setTimeout(()=>$("#gate").remove(),1200); });
+/* ---------- Opening moment + background music ---------- */
+const weddingMusic = new Audio("./audio.mp3");
+weddingMusic.loop = true;
+weddingMusic.volume = 0.6;
+weddingMusic.preload = "auto";
+
+$("#openBtn").addEventListener("click", () => {
+  // Play directly from the guest's click for better mobile browser support.
+  weddingMusic.play().catch(error => console.warn("Music playback unavailable:", error));
+  $("#gate").classList.add("gone");
+  setTimeout(() => $("#gate").remove(), 1200);
+});
 
 /* ---------- Lanterns ---------- */
 (function(){

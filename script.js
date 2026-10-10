@@ -21,14 +21,26 @@ const keyOf = g => String(g.groupId || g.guestId || "");
 const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
 /* ---------- Opening moment + background music ---------- */
-const weddingMusic = new Audio("./audio.mp3");
+// Reuse the <audio id="weddingMusic"> already present in index.html.
+// Creating a second Audio() object makes debugging confusing and duplicates playback.
+const weddingMusic = document.getElementById("weddingMusic") || (() => {
+  const audio = document.createElement("audio");
+  audio.id = "weddingMusic";
+  audio.src = "./audio.mp3";
+  document.body.appendChild(audio);
+  return audio;
+})();
 weddingMusic.loop = true;
 weddingMusic.volume = 0.6;
+weddingMusic.muted = false;
 weddingMusic.preload = "auto";
 
 $("#openBtn").addEventListener("click", () => {
-  // Play directly from the guest's click for better mobile browser support.
-  weddingMusic.play().catch(error => console.warn("Music playback unavailable:", error));
+  // Keep play() synchronous with the user's click for mobile browser support.
+  const playAttempt = weddingMusic.play();
+  if (playAttempt && typeof playAttempt.catch === "function") {
+    playAttempt.catch(error => console.error("Wedding music could not play:", error));
+  }
   $("#gate").classList.add("gone");
   setTimeout(() => $("#gate").remove(), 1200);
 });

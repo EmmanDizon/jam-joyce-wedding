@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Jam & Joyce · RSVP Report</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:#f5eaf5;background:#140b27;font-synthesis:none}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 20% 0%,#312046,#140b27 55%);min-height:100vh}main{max-width:1180px;margin:auto;padding:32px 22px 80px}header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:28px}.eyebrow{font-size:11px;letter-spacing:.3em;color:#d9b76c;text-transform:uppercase}h1{font-family:Georgia,serif;font-size:clamp(29px,4vw,45px);font-weight:400;margin:9px 0 5px}.muted{color:#bdb2cb}.small{font-size:12px}.panel,.stat{border:1px solid #58456a;background:#211433d9;border-radius:15px;padding:20px;box-shadow:0 12px 32px #0a04101c}button,input,select{font:inherit}button{cursor:pointer;border:1px solid #a98c54;background:#b89553;color:#1b1029;padding:11px 16px;border-radius:9px;font-weight:700}button.secondary{background:transparent;color:#e6c78b}button:disabled{opacity:.55;cursor:wait}input,select{background:#1a102b;border:1px solid #675376;color:#fff;border-radius:9px;padding:12px;width:100%;min-width:0}input:focus,select:focus{outline:2px solid #c9a66a}#login{max-width:460px;margin:55px auto}#login h2{font-family:Georgia,serif;font-weight:400}#login form{display:flex;gap:10px;flex-wrap:wrap}#login input{flex:1;min-width:210px}#dashboard{display:none}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:20px}.stat label{display:block;color:#c3b3ce;font-size:12px}.stat strong{display:block;font-size:32px;margin-top:10px;font-weight:650}.progress{display:flex;height:14px;overflow:hidden;border-radius:99px;background:#483b59;margin:17px 0}.progress span{display:block}.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:#d8ccdf}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:20px 0}.toolbar input{flex:1;min-width:200px}.toolbar select{width:160px}.table-wrap{overflow:auto;border:1px solid #58456a;border-radius:14px}table{border-collapse:collapse;width:100%;min-width:730px}th,td{padding:14px 15px;text-align:left;border-bottom:1px solid #423250;vertical-align:top}th{font-size:12px;color:#e4c384;letter-spacing:.05em;background:#2b1b40}tr:last-child td{border-bottom:0}td{font-size:13px}td .muted{display:block;margin-top:4px}.status{font-size:12px;border:1px solid #77668a;border-radius:99px;padding:4px 9px;white-space:nowrap}.status.Confirmed{color:#9ee3bd;border-color:#438c65}.status.Declined{color:#f2b4b4;border-color:#a75c6a}.status.Pending{color:#d3c5df}details summary{cursor:pointer;color:#e9cb93}details[open] summary{margin-bottom:8px}.members{padding-left:15px;margin:7px 0;line-height:1.9}.pill{font-size:11px;color:#c5b3d4}.message{max-width:260px;overflow-wrap:anywhere}#notice{min-height:22px;color:#f4b7b7;margin-top:12px}.section-title{font-family:Georgia,serif;font-size:22px;margin:25px 0 15px}.foot{margin-top:24px;font-size:12px;color:#b4a6c2}#empty{text-align:center;padding:30px}.summaryline{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.summaryline button{padding:8px 12px}@media(max-width:700px){main{padding:22px 13px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.stat{padding:15px}.stat strong{font-size:27px}.toolbar select{flex:1}.toolbar button{flex:1}}
+</style>
+</head>
+<body><main>
+<header><div><div class="eyebrow">Jam &amp; Joyce · February 27, 2027</div><h1>Wedding RSVP Report</h1><div class="muted small">Private coordinator dashboard · read only</div></div></header>
+<section id="login" class="panel"><h2>Coordinator access</h2><p class="muted">Enter the private report password. This is separate from guest invitation codes.</p><form id="loginForm"><input id="password" type="password" required autocomplete="off" placeholder="Report password" aria-label="Report password"><button id="loginBtn">View report</button></form><div id="notice" role="status"></div></section>
+<section id="dashboard">
+<div class="stats"><div class="stat"><label>Reserved seats</label><strong id="reserved">—</strong></div><div class="stat"><label>Confirmed attendees</label><strong id="confirmed">—</strong></div><div class="stat"><label>Declined seats</label><strong id="declined">—</strong></div><div class="stat"><label>Pending seats</label><strong id="pending">—</strong></div></div>
+<div class="panel"><div class="summaryline"><strong>Attendance overview</strong><span id="updated" class="muted small"></span></div><div class="progress"><span id="barConfirmed" style="background:#55b68d"></span><span id="barDeclined" style="background:#c88e76"></span><span id="barPending" style="background:#8e7ca5"></span></div><div class="legend"><span><i class="dot" style="background:#55b68d"></i>Confirmed</span><span><i class="dot" style="background:#c88e76"></i>Declined</span><span><i class="dot" style="background:#8e7ca5"></i>Pending</span></div></div>
+<h2 class="section-title">Guest RSVP Records</h2><div class="toolbar"><input id="search" placeholder="Search name, Group ID, table, role..." aria-label="Search guests"><select id="statusFilter" aria-label="Filter by status"><option value="">All statuses</option><option>Confirmed</option><option>Declined</option><option>Pending</option></select><button class="secondary" id="refresh">Refresh</button><button class="secondary" id="export">Export CSV</button></div>
+<div class="table-wrap"><table><thead><tr><th>Group / Main Guest</th><th>Status</th><th>Attending / Seats</th><th>Group members &amp; tables</th><th>Contact / Message</th></tr></thead><tbody id="rows"></tbody></table><div id="empty" hidden>No matching groups.</div></div>
+<p class="foot" id="count"></p><p class="foot">This dashboard does not edit invitations or RSVP responses. CSV exports contain personal information; share only with authorized coordinators.</p>
+</section></main>
+<script>
+'use strict';
+// Keep in sync with script.js. This URL is public; REPORT_PASSWORD is NOT.
+const ENDPOINT='https://script.google.com/macros/s/AKfycbwld34Ltj0jZZbOc1a7_AoWgFx46XRiZPvAeUCnoiJ6EgqzO87aXe4LyicgrVeWYKiY/exec';
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let report=null, secret='';
+async function fetchReport(password){
+ const response=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action:'report',password}),cache:'no-store'});
+ const data=await response.json();
+ if(!data.ok)throw Error(data.error||'Unable to load report.');
+ return data.report;
+}
+function render(){
+ if(!report)return;
+ const groups=report.groups||[];
+ const total=report.summary?.reserved??groups.reduce((n,g)=>n+g.reserved,0),confirmed=report.summary?.confirmed??groups.reduce((n,g)=>n+g.attending,0),declined=report.summary?.declined??groups.reduce((n,g)=>n+g.declined,0),pending=report.summary?.pending??total-confirmed-declined;
+ $('notice').textContent=(report.unmatchedGroupIds||[]).length?'Attention: RSVP records with unmatched Group IDs: '+report.unmatchedGroupIds.join(', '):'';
+ $('reserved').textContent=total;$('confirmed').textContent=confirmed;$('declined').textContent=declined;$('pending').textContent=pending;
+ $('barConfirmed').style.width=(total?100*confirmed/total:0)+'%';$('barDeclined').style.width=(total?100*declined/total:0)+'%';$('barPending').style.width=(total?100*pending/total:0)+'%';
+ $('updated').textContent='Loaded '+new Date(report.generatedAt).toLocaleString('en-PH');
+ const term=$('search').value.trim().toLowerCase(),filter=$('statusFilter').value;
+ const visible=groups.filter(g=>(!filter||g.status===filter)&&(!term||[g.groupId,g.mainGuest,g.mobileNo,g.message,...g.members.flatMap(m=>[m.name,m.weddingRole,m.tableNo])].join(' ').toLowerCase().includes(term)));
+ $('rows').innerHTML=visible.map(g=>`<tr><td><strong>${esc(g.groupId)}</strong><span class="muted">${esc(g.mainGuest)}</span></td><td><span class="status ${esc(g.status)}">${esc(g.status)}</span></td><td>${g.attending} / ${g.reserved}<span class="muted">${g.status==='Pending'?'Awaiting reply':g.declined+' not attending'}</span></td><td><details><summary>${g.members.length} member${g.members.length===1?'':'s'}</summary><ul class="members">${g.members.map(m=>`<li>${esc(m.name)} <span class="pill">· ${esc(m.weddingRole)} · Table ${esc(m.tableNo||'TBA')} · ${g.status==='Pending'?'Pending':m.attending?'Attending':'Not attending'}</span></li>`).join('')}</ul></details></td><td><span>${esc(g.mobileNo||'—')}</span>${g.message?`<span class="muted message">${esc(g.message)}</span>`:''}</td></tr>`).join('');
+ $('empty').hidden=visible.length!==0;$('count').textContent=`Showing ${visible.length} of ${groups.length} invitation groups`;
+}
+async function load(password){const data=await fetchReport(password);secret=password;report=data;$('login').hidden=true;$('dashboard').style.display='block';render();}
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();const btn=$('loginBtn');btn.disabled=true;$('notice').textContent='';try{await load($('password').value);$('password').value='';}catch(err){$('notice').textContent=err.message;}finally{btn.disabled=false;}});
+$('refresh').addEventListener('click',async()=>{const btn=$('refresh');btn.disabled=true;try{await load(secret);}catch(err){alert('Refresh failed: '+err.message);}finally{btn.disabled=false;}});
+$('search').addEventListener('input',render);$('statusFilter').addEventListener('change',render);
+function csvCell(v){const s=String(v??'');const safe=/^[=+@\-\t\r]/.test(s)?"'"+s:s;return '"'+safe.replace(/"/g,'""')+'"';}
+$('export').addEventListener('click',()=>{
+ if(!report)return;
+ const term=$('search').value.trim().toLowerCase(),filter=$('statusFilter').value;
+ const groups=report.groups.filter(g=>(!filter||g.status===filter)&&(!term||[g.groupId,g.mainGuest,g.mobileNo,g.message,...g.members.flatMap(m=>[m.name,m.weddingRole,m.tableNo])].join(' ').toLowerCase().includes(term)));
+ const rows=[['Group ID','Main Guest','Group Status','Guest Name','Guest Type','Wedding Role','Table No','Guest Attendance','Reserved Seats','Confirmed Seats','Mobile No','Message','Submitted At']];
+ groups.forEach(g=>g.members.forEach(m=>rows.push([g.groupId,g.mainGuest,g.status,m.name,m.type,m.weddingRole,m.tableNo,g.status==='Pending'?'Pending':m.attending?'Attending':'Not attending',g.reserved,g.attending,g.mobileNo,g.message,g.submittedAt])));
+ const blob=new Blob(['\ufeff'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='jam-joyce-rsvp-report.csv';document.body.append(a);a.click();a.remove();URL.revokeObjectURL(url);
+});
+</script></body></html>

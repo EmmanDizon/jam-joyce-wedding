@@ -575,3 +575,9 @@ img, svg, video { max-width:100%; }
 .ent .panel > .corner.tr.fc {
   transform: scaleX(-1) !important;
 }
+
+/* Correct upper-right flower orientation */
+.ent .panel > .corner.tr.fc,
+#rsvp .panel > .corner.tr.fc {
+  transform: scaleX(-1) !important;
+}

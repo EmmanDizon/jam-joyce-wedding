@@ -118,7 +118,7 @@ q.addEventListener("input",()=>{
   if(panel.querySelector(".msg") && !panel.querySelector(".card")) panel.innerHTML="";
   list.forEach(g=>{
     const li=document.createElement("li"), b=document.createElement("button");
-    b.type="button"; b.innerHTML=`${esc(g.name)}<small>${esc(g.role||"Guest")}</small>`;
+    b.type="button"; b.innerHTML=`${esc(displayGuestName(g.name))}<small>${esc(g.role||"Guest")}</small>`;
     b.addEventListener("click",()=>pick(g)); li.appendChild(b); results.appendChild(li);
   });
 });
@@ -156,14 +156,11 @@ function pick(g){
       btn.disabled=false;btn.textContent="Continue to RSVP";
     }
   });
-  // On phones, keep the RSVP heading and flowers in view after guest selection.
-  // Desktop retains the existing focus-on-card behavior.
-  if (window.matchMedia("(min-width: 601px)").matches) {
-    if (window.matchMedia("(max-width: 600px)").matches) {
+  // Keep the floral heading visible on phones; scroll to the card on larger screens.
+  if (window.matchMedia("(max-width: 600px)").matches) {
     document.getElementById("rsvp").scrollIntoView({behavior:"smooth",block:"start"});
   } else {
     panel.querySelector(".card").scrollIntoView({behavior:"smooth",block:"start"});
-  }
   }
 }
 
@@ -191,6 +188,7 @@ function renderRSVP(group,code){
       <p class="who">${esc(displayGuestName(primary.name))}</p>
       <div class="seats"><b>${members.length}</b> reserved ${members.length===1?"seat":"seats"}</div>
       <p class="hint">Please select everyone who will attend. Unchecked guests will be marked as not attending.</p>
+      <p class="hint">Any member of this invitation group may submit or update this RSVP. Saving replaces the group's previous response.</p>
       <div class="attendee-list">${rows}</div>
       <p class="attendee-counter" id="attendeeCounter" aria-live="polite"></p>
       <div class="field">
@@ -241,6 +239,7 @@ async function sendGroup(group,code){
     input.setCustomValidity("");
     companionNames[input.dataset.guestId]=fullName;
   }
+  if(!window.confirm("You are submitting the RSVP for the entire invitation group. This will replace any previous response for the group. Continue?")) return;
   const btn=$("#send"),msg=$("#sendMsg");
   btn.disabled=true;btn.textContent="Saving…";msg.textContent="";
   try{

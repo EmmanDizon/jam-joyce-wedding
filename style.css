@@ -538,3 +538,17 @@ img, svg, video { max-width:100%; }
   .intro, .hint, .attendee-name, .g-intro { overflow-wrap:break-word; }
   .details, .choice { min-width:0; }
 }
+/* RSVP mobile anchor: keep the floral heading visible below iOS safe areas. */
+@media (max-width: 600px) {
+  #rsvp {
+    scroll-margin-top: env(safe-area-inset-top, 0px);
+    padding-top: clamp(3.5rem, 12vw, 5rem);
+  }
+  #rsvp .panel {
+    padding-top: clamp(5.5rem, 18vw, 7rem);
+  }
+  #rsvp .panel > h2 {
+    position: relative;
+    z-index: 3;
+  }
+}

@@ -251,6 +251,7 @@ async function sendGroup(group,code){
       name:group.members.find(m=>m.main)?.name||group.members[0].name,
       firstName:group.mainFirstName || (group.members.find(m=>m.main)?.name||group.members[0].name).split(" ")[0],
       role:group.weddingRole || "Guest",
+      roles:group.members.filter(m=>attendeeIds.includes(String(m.guestId))).map(m=>m.weddingRole || "Guest"),
       attending:attendeeIds.length>0,seatsUsed:attendeeIds.length,
       seatsReserved:group.members.length,
       companions:group.members.filter(m=>!m.main&&attendeeIds.includes(String(m.guestId))).map(m=>companionNames[String(m.guestId)]||m.name)
@@ -432,20 +433,25 @@ const ICON = {
 const svgIcon=n=>`<svg viewBox="0 0 48 48" class="ti-ic" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${ICON[n]||ICON.rings}</svg>`;
 
 function openGuide(rec){
-  const grp=roleGroup(rec.role), D=DRESS[grp];
+  // Show every unique dress code represented by confirmed attendees in this group.
+  const groups=[...new Set((rec.roles && rec.roles.length ? rec.roles : [rec.role]).map(roleGroup))];
+  const dressCodes=groups.map(group=>DRESS[group]);
   // Personalize only for the main guest, never concatenate companions.
   const rawFirstName=String(rec.firstName||rec.name||"Guest").trim().split(/\s+/)[0];
   const who=rawFirstName.toLocaleLowerCase("en-PH").replace(/^./,c=>c.toLocaleUpperCase("en-PH"));
   $("#gHello").textContent=`Dear ${who},`;
-  $("#gRole").textContent=D.title;
-  $("#gIntro").textContent=D.intro;
-  $("#gAttire").innerHTML=D.groups.map(g=>`
-    <div class="att-group">
-      <p class="caps">${g.label}</p>
-      <p class="att-note">${g.note}</p>
-      <div class="figs">${g.figs.join("")}</div>
-      <div class="pal-wrap"><p class="pal-label">${g.label} palette</p><div class="pal">${g.palette.map(c=>`<span style="background:${c}"></span>`).join("")}</div></div>
-    </div>`).join("")+(D.note?`<p class="att-extra">${D.note}</p>`:"");
+  $("#gRole").textContent=dressCodes.map(d=>d.title).join(" + ");
+  $("#gIntro").textContent=dressCodes.length===1 ? dressCodes[0].intro : "Dress codes for the confirmed members of your group are shown below.";
+  $("#gAttire").innerHTML=dressCodes.map(D=>`
+    ${dressCodes.length>1 ? `<p class="caps" style="margin-top:24px;font-weight:700">${esc(D.title)} Dress Code</p><p class="att-note">${esc(D.intro)}</p>` : ""}
+    ${D.groups.map(g=>`
+      <div class="att-group">
+        <p class="caps">${g.label}</p>
+        <p class="att-note">${g.note}</p>
+        <div class="figs">${g.figs.join("")}</div>
+        <div class="pal-wrap"><p class="pal-label">${g.label} palette</p><div class="pal">${g.palette.map(c=>`<span style="background:${c}"></span>`).join("")}</div></div>
+      </div>`).join("")}
+    ${D.note?`<p class="att-extra">${D.note}</p>`:""}`).join("");
   $("#gTimeline").innerHTML=TIMELINE.map((t,i)=>`
     <li class="${i%2?"l":"r"}"><span class="ti-dot"></span>${svgIcon(t.icon)}<div class="ti-txt"><b>${esc(t.time)}</b><span>${esc(t.event)}</span></div></li>`).join("");
   const g=$("#guide"); g.hidden=false; g.scrollTop=0; document.body.style.overflow="hidden";

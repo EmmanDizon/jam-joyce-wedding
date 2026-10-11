@@ -552,3 +552,20 @@ img, svg, video { max-width:100%; }
     z-index: 3;
   }
 }
+/* Principal sponsors: each left/right pair shares one grid row, even when names wrap. */
+.ent .principal-sponsors-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  column-gap:1.5rem;
+  align-items:center;
+  text-align:center;
+}
+.ent .principal-sponsor-name{
+  min-width:0;
+  padding:.12rem 0;
+  line-height:1.65;
+  overflow-wrap:normal;
+}
+@media (max-width:26rem){
+  .ent .principal-sponsors-grid{column-gap:.8rem;font-size:1.08rem}
+}

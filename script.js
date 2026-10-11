@@ -156,7 +156,15 @@ function pick(g){
       btn.disabled=false;btn.textContent="Continue to RSVP";
     }
   });
-  panel.querySelector(".card").scrollIntoView({behavior:"smooth",block:"start"});
+  // On phones, keep the RSVP heading and flowers in view after guest selection.
+  // Desktop retains the existing focus-on-card behavior.
+  if (window.matchMedia("(min-width: 601px)").matches) {
+    if (window.matchMedia("(max-width: 600px)").matches) {
+    document.getElementById("rsvp").scrollIntoView({behavior:"smooth",block:"start"});
+  } else {
+    panel.querySelector(".card").scrollIntoView({behavior:"smooth",block:"start"});
+  }
+  }
 }
 
 function renderRSVP(group,code){
@@ -448,4 +456,3 @@ function closeGuide(){ const g=$("#guide"); g.classList.remove("on"); document.b
 $("#gBack").addEventListener("click",closeGuide);
 $("#gBack2").addEventListener("click",closeGuide);
 addEventListener("keydown",e=>{ if(e.key==="Escape" && !$("#guide").hidden && $("#lb").hidden) closeGuide(); });
-

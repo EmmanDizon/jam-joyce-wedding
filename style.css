@@ -569,3 +569,9 @@ img, svg, video { max-width:100%; }
 @media (max-width:26rem){
   .ent .principal-sponsors-grid{column-gap:.8rem;font-size:1.08rem}
 }
+
+
+/* Keep the entourage's upper-right flower correctly oriented */
+.ent .panel > .corner.tr.fc {
+  transform: scaleX(-1) !important;
+}

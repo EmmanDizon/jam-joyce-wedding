@@ -552,18 +552,20 @@ img, svg, video { max-width:100%; }
     z-index: 3;
   }
 }
-/* Principal sponsors: matched pairs stay aligned across both columns. */
+/* Principal sponsors: fixed left edges and synchronized pair rows. */
 .ent .principal-sponsors-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: 1.5rem;
   row-gap: 0.35rem;
   align-items: center;
-  text-align: center;
+  text-align: left;
 }
-.ent .principal-sponsor-name {
+.ent .principal-sponsors-grid > .principal-sponsor-name {
   min-width: 0;
+  margin: 0;
   padding: 0.12rem 0;
+  text-align: left;
   line-height: 1.5;
   overflow-wrap: normal;
 }

@@ -624,3 +624,20 @@ img, svg, video { max-width:100%; }
     column-gap: .25rem;
   }
 }
+
+/* Center the two-column name blocks without centering individual names. */
+.ent .principal-sponsors-grid,
+.ent .entourage-columns {
+  width: calc(100% - 32px);
+  max-width: 600px;
+  margin-inline: auto;
+}
+.ent .principal-sponsors-grid > .principal-sponsor-name,
+.ent .entourage-columns ul,
+.ent .entourage-columns li {
+  text-align: left;
+}
+@media (max-width: 360px) {
+  .ent .principal-sponsors-grid,
+  .ent .entourage-columns { width: calc(100% - 24px); }
+}

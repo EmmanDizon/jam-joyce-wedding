@@ -693,3 +693,19 @@ img, svg, video { max-width:100%; }
   .ent .entourage-columns,
   .ent .entourage-pairs { width: 100%; }
 }
+
+/* FINAL: same top edge for both names in each sponsor pair, centered text */
+.ent .principal-sponsors-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  justify-items: stretch;
+  grid-auto-flow: row;
+}
+.ent .principal-sponsors-grid > .principal-sponsor-name {
+  align-self: start;
+  text-align: center;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+}

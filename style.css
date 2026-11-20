@@ -641,3 +641,55 @@ img, svg, video { max-width:100%; }
   .ent .principal-sponsors-grid,
   .ent .entourage-columns { width: calc(100% - 24px); }
 }
+
+/* FINAL ENTOURAGE FIX: center names INSIDE each column, not only the grid.
+   Keep paired sponsors on synchronized rows. */
+.ent .principal-sponsors-grid,
+.ent .entourage-columns {
+  width: min(100%, 600px);
+  margin-inline: auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(0.5rem, 2.5vw, 1.5rem);
+  text-align: center;
+}
+.ent .principal-sponsors-grid > .principal-sponsor-name {
+  text-align: center;
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+.ent .entourage-columns > div,
+.ent .entourage-columns h3,
+.ent .entourage-columns ul,
+.ent .entourage-columns li,
+.ent .entourage-columns .role {
+  text-align: center;
+}
+.ent .entourage-columns ul {
+  padding-inline: 0;
+  margin-inline: 0;
+  list-style: none;
+}
+.ent .entourage-columns li {
+  overflow-wrap: break-word;
+}
+.ent .entourage-pairs {
+  width: min(100%, 600px);
+  margin-inline: auto;
+  padding-inline: 0;
+}
+.ent .entourage-pairs li {
+  grid-template-columns: minmax(0, 1fr) 2.7rem minmax(0, 1fr);
+  align-items: center;
+  column-gap: .25rem;
+}
+.ent .entourage-pairs li span:first-child,
+.ent .entourage-pairs li span:last-child,
+.ent .entourage-pairs .and {
+  text-align: center;
+  overflow-wrap: break-word;
+}
+@media (max-width: 360px) {
+  .ent .principal-sponsors-grid,
+  .ent .entourage-columns,
+  .ent .entourage-pairs { width: 100%; }
+}

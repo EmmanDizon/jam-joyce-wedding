@@ -709,3 +709,91 @@ img, svg, video { max-width:100%; }
   margin: 0;
   padding: 0;
 }
+
+
+/* ============================================================
+   ENTOURAGE ALIGNMENT — FINAL OVERRIDES
+   Center each name inside its column; align paired grid cells
+   from the top. Preserve responsive text wrapping.
+   ============================================================ */
+.ent .principal-sponsors-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(.6rem, 2.5vw, 1.5rem);
+  row-gap: .35rem;
+  width: 100%;
+  max-width: 600px;
+  margin-inline: auto;
+  align-items: start;
+  justify-items: stretch;
+  text-align: center;
+}
+.ent .principal-sponsors-grid > .principal-sponsor-name {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  align-self: start;
+  text-align: center;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+/* Parents, best man/maid of honor, groomsmen/bridesmaids,
+   bearers/flower girls. */
+.ent .entourage-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(.6rem, 2.5vw, 1.5rem);
+  width: 100%;
+  max-width: 600px;
+  margin-inline: auto;
+  align-items: start;
+  text-align: center;
+}
+.ent .entourage-columns > div,
+.ent .entourage-columns h3,
+.ent .entourage-columns ul,
+.ent .entourage-columns li,
+.ent .entourage-columns .role {
+  min-width: 0;
+  text-align: center;
+}
+.ent .entourage-columns ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.ent .entourage-columns li {
+  margin: .35rem 0;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+}
+/* Secondary sponsors: left name / role / right name */
+.ent .entourage-pairs {
+  width: 100%;
+  max-width: 600px;
+  margin-inline: auto;
+  padding: 0;
+}
+.ent .entourage-pairs li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 2.7rem minmax(0, 1fr);
+  column-gap: .25rem;
+  align-items: start;
+  margin: .35rem 0;
+  line-height: 1.5;
+}
+.ent .entourage-pairs li > span,
+.ent .entourage-pairs .and {
+  min-width: 0;
+  align-self: start;
+  text-align: center;
+  overflow-wrap: break-word;
+}
+@media (max-width: 26rem) {
+  .ent .principal-sponsors-grid,
+  .ent .entourage-columns { column-gap: .6rem; }
+  .ent .entourage-pairs li {
+    grid-template-columns: minmax(0, 1fr) 2.3rem minmax(0, 1fr);
+    column-gap: .15rem;
+  }
+}
